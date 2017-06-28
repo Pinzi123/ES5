@@ -39,6 +39,10 @@ class Lottery extends mix(Chess,ChessBoard){
     this.count = 0
   }
 
+  /**
+   * [init description]
+   * @return {[type]} [description]
+   */
   init() {
     this.chessBoardInit()
     this.chessInit()
