@@ -1,10 +1,22 @@
 var path = require('path');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
-  entry: "./ES6_Game/main.js",
+  entry: {
+    chess: "./ES6_Game/chess.js"
+  },
   output: {
-    filename: 'bundle.js',
+    filename: 'js/[name].js',
     path: path.resolve(__dirname, 'dist')
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      filename: 'chess.html',
+      template: 'template.html',
+      inject: 'body',
+      title: '五子棋',
+      chunks: ['chess']
+    })
+  ],
   module: {
     loaders: [
       {

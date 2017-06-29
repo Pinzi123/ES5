@@ -6,7 +6,7 @@ class ChessBoard {
     var _this = this
     this.context.strokeStyle = "#BFBFBF"
     var logo = new Image()
-    logo.src = 'img/logo.png'
+    logo.src = './img/logo.png'
     logo.onload = function() {
       _this.context.drawImage(logo, 50, 50, 350, 350)
       _this.drawChessBoard()
