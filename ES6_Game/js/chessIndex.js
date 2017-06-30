@@ -1,6 +1,6 @@
-require('./css/chess.css')
-import Chess from './js/chess/chess.js'
-import ChessBoard from './js/chess/chessBoard.js'
+require('../css/chess.css')
+import Chess from './chess/chess.js'
+import ChessBoard from './chess/chessBoard.js'
 
 // 实现多重继承
 const copyProperties=function(target,source){

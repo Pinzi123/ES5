@@ -8,10 +8,10 @@
        }
      }
 
-     for(var x=0;x<15;x++){
-         this.chessBoard[x]=new Array();        //声明二维数组
-         for(var y=0;y<15;y++){
-            this.chessBoard[x][y]=0;          //数组初始化为0
+     for(var x=0; x < 15; x++){
+         this.chessBoard[x]=new Array()     //声明二维数组
+         for(var y=0 ; y<15; y++){
+            this.chessBoard[x][y]=0          //数组初始化为0
          }
      }
 

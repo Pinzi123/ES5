@@ -1,34 +1,62 @@
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+var webpack = require('webpack');
 module.exports = {
   entry: {
-    chess: "./ES6_Game/chess.js"
+    chess: "./ES6_Game/js/chessIndex.js",
+    tinyHeart: "./ES6_Game/js/tinyHeartIndex.js"
   },
   output: {
     filename: 'js/[name].js',
     path: path.resolve(__dirname, 'dist')
   },
   plugins: [
+    new ExtractTextPlugin("css/[name].css"),
+    new OptimizeCssAssetsPlugin({
+      assetNameRegExp: /\.css$/g,
+      cssProcessor: require('cssnano'),
+      cssProcessorOptions: { discardComments: {removeAll: true } },
+      canPrint: true
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    }),
     new HtmlWebpackPlugin({
       filename: 'chess.html',
-      template: 'template.html',
+      template: 'ES6_Game/chess.html',
       inject: 'body',
       title: '五子棋',
       chunks: ['chess']
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'tinyHeart.html',
+      template: 'ES6_Game/tinyHeart.html',
+      inject: 'body',
+      title: '爱心鱼',
+      chunks: ['tinyHeart']
     })
   ],
   module: {
     loaders: [
-      {
-        test: path.join(__dirname, 'es6'),
-        loader: 'babel-loader',
-        query: {
-          presets: ['es2015']
-        }
+      // {
+      //   test: path.join(__dirname, 'es6'),
+      //   loader: 'babel-loader',
+      //   query: {
+      //     presets: ['es2015']
+      //   }
+      // },
+      {  test: /\.js$/,
+       loader: "babel-loader",
+       query: {presets: ['es2015']},
+       exclude: /node_modules/
       },
       {
         test: /\.css$/,
-        loader: 'style-loader!css-loader'
+        loader: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader' })
       }
     ]
   }
