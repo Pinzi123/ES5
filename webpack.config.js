@@ -2,7 +2,7 @@ var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-var webpack = require('webpack');
+//var webpack = require('webpack');
 module.exports = {
   entry: {
     chess: "./ES6_Game/js/chessIndex.js",
@@ -20,11 +20,11 @@ module.exports = {
       cssProcessorOptions: { discardComments: {removeAll: true } },
       canPrint: true
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      }
-    }),
+    // new webpack.optimize.UglifyJsPlugin({
+    //   compress: {
+    //     warnings: false
+    //   }
+    // }),
     new HtmlWebpackPlugin({
       filename: 'chess.html',
       template: 'ES6_Game/chess.html',
