@@ -6,7 +6,8 @@ var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 module.exports = {
   entry: {
     chess: "./ES6_Game/js/chessIndex.js",
-    tinyHeart: "./ES6_Game/js/tinyHeartIndex.js"
+    tinyHeart: "./ES6_Game/js/tinyHeartIndex.js",
+    commonFunc: './ES6_Game/js/tinyHeart/commonFunctions.js'
   },
   output: {
     filename: 'js/[name].js',
@@ -20,6 +21,11 @@ module.exports = {
       cssProcessorOptions: { discardComments: {removeAll: true } },
       canPrint: true
     }),
+    // 把jquery作为全局变量插入到所有的代码中
+    // 然后就可以直接在页面中使用jQuery了
+    // new webpack.ProvidePlugin({
+    //   commonFunc: 'commonFunc',
+    // }),
     // new webpack.optimize.UglifyJsPlugin({
     //   compress: {
     //     warnings: false

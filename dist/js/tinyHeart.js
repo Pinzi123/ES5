@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -68,7 +68,8 @@
 /* 1 */,
 /* 2 */,
 /* 3 */,
-/* 4 */
+/* 4 */,
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -76,11 +77,11 @@
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _ane = __webpack_require__(8);
+var _ane = __webpack_require__(6);
 
 var _ane2 = _interopRequireDefault(_ane);
 
-var _fruit = __webpack_require__(14);
+var _fruit = __webpack_require__(7);
 
 var _fruit2 = _interopRequireDefault(_fruit);
 
@@ -88,8 +89,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-__webpack_require__(5);
-__webpack_require__(6);
+__webpack_require__(8);
 
 var tinyHeart = function () {
   function tinyHeart() {
@@ -144,130 +144,7 @@ var tiny = new tinyHeart();
 document.body.onload = tiny.game();
 
 /***/ }),
-/* 5 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
 /* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-window.requestAnimFrame = function () {
-	return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function ( /* function FrameRequestCallback */callback, /* DOMElement Element */element) {
-		return window.setTimeout(callback, 1000 / 60);
-	};
-}();
-
-function calLength2(x1, y1, x2, y2) {
-	return Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2);
-}
-
-function randomColor() {
-	var col = [0, 1, 2];
-	col[0] = Math.random() * 100 + 155;
-	col[0] = col[0].toFixed();
-	col[1] = Math.random() * 100 + 155;
-	col[1] = col[1].toFixed();
-	col[2] = Math.random() * 100 + 155;
-	col[2] = col[2].toFixed();
-	var num = Math.floor(Math.random() * 3);
-	col[num] = 0;
-	return "rgba(" + col[0] + "," + col[1] + "," + col[2] + ",";
-}
-
-function lerpAngle(a, b, t) {
-	var d = b - a;
-	if (d > Math.PI) d = d - 2 * Math.PI;
-	if (d < -Math.PI) d = d + 2 * Math.PI;
-	return a + d * t;
-}
-
-function lerpDistance(aim, cur, ratio) {
-	var delta = cur - aim;
-	return aim + delta * ratio;
-}
-
-function inOboundary(arrX, arrY, l, r, t, b) {
-	//在l r t b范围内的检测
-	return arrX > l && arrX < r && arrY > t && arrY < b;
-}
-
-function rgbColor(r, g, b) {
-	r = Math.round(r * 256);
-	g = Math.round(g * 256);
-	b = Math.round(b * 256);
-	return "rgba(" + r + "," + g + "," + b + ",1)";
-}
-
-function rgbNum(r, g, b) {
-	r = Math.round(r * 256);
-	g = Math.round(g * 256);
-	b = Math.round(b * 256);
-	return "rgba(" + r + "," + g + "," + b;
-}
-
-function rnd(m) {
-	var n = m || 1;
-	return Math.random() * n;
-}
-
-function rateRandom(m, n) {
-	var sum = 0;
-	for (var i = 1; i < n - m; i++) {
-		sum += i;
-	}
-
-	var ran = Math.random() * sum;
-
-	for (var i = 1; i < n - m; i++) {
-		ran -= i;
-		if (ran < 0) {
-			return i - 1 + m;
-		}
-	}
-}
-
-function distance(x1, y1, x2, y2, l) {
-	var x = Math.abs(x1 - x2);
-	var y = Math.abs(y1 - y2);
-	if (x < l && y < l) {
-		return true;
-	}
-	return false;
-}
-
-function AABBbox(object1, w1, h1, object2, w2, h2, overlap) {
-	A1 = object1.x + overlap;
-	B1 = object1.x + w1 - overlap;
-	C1 = object1.y + overlap;
-	D1 = object1.y + h1 - overlap;
-
-	A2 = object2.x + overlap;
-	B2 = object2.x + w2 - overlap;
-	C2 = object2.y + overlap;
-	D2 = object2.y + h2 - overlap;
-
-	if (A1 > B2 || B1 < A2 || C1 > D2 || D1 < C2) return false;else return true;
-}
-
-function dis2(x, y, x0, y0) {
-	var dx = x - x0;
-	var dy = y - y0;
-	return dx * dx + dy * dy;
-}
-
-function rndi2(m, n) {
-	var a = Math.random() * (n - m) + m;
-	return Math.floor(a);
-}
-
-/***/ }),
-/* 7 */,
-/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -285,6 +162,7 @@ var aneObj = function () {
     this.len = [];
     this.num = 50;
     this.that = that;
+    console.log(rnd(2));
   }
 
   _createClass(aneObj, [{
@@ -320,12 +198,7 @@ var aneObj = function () {
 module.exports = aneObj;
 
 /***/ }),
-/* 9 */,
-/* 10 */,
-/* 11 */,
-/* 12 */,
-/* 13 */,
-/* 14 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -424,6 +297,12 @@ var fruitObj = function () {
 }();
 
 module.exports = fruitObj;
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

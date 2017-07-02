@@ -4,6 +4,7 @@ class aneObj {
     this.len = []
     this.num = 50
     this.that = that
+    console.log(rnd(2))
   }
   init () {
     for (var i = 0; i < this.num; i++) {

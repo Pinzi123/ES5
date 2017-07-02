@@ -1,8 +1,6 @@
 require('../css/tinyHeart.css')
-require('../js/tinyHeart/commonFunctions.js')
 import aneObj from './tinyHeart/ane.js'
 import fruitObj from './tinyHeart/fruit.js'
-
 
 class tinyHeart{
   constructor() {
@@ -19,6 +17,7 @@ class tinyHeart{
     this.deltaTime = 0
     this.fruit= new fruitObj(this)
     this.ane = new aneObj(this)
+
   }
 
    game() {
