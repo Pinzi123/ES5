@@ -6,8 +6,7 @@ var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 module.exports = {
   entry: {
     chess: "./ES6_Game/js/chessIndex.js",
-    tinyHeart: "./ES6_Game/js/tinyHeartIndex.js",
-    commonFunc: './ES6_Game/js/tinyHeart/commonFunctions.js'
+    tinyHeart: "./ES6_Game/js/tinyHeartIndex.js"
   },
   output: {
     filename: 'js/[name].js',

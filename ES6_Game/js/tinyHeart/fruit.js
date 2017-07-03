@@ -54,6 +54,10 @@ class fruitObj {
     }
   }
 
+  dead(i) {
+    this.alive[i] = false
+  }
+
   fruitMonitor () {
     var num = 0
     for (var i = 0; i < this.num; i++) {
