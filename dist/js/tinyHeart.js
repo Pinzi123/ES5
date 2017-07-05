@@ -108,7 +108,7 @@ var _halo = __webpack_require__(12);
 
 var _halo2 = _interopRequireDefault(_halo);
 
-var _dust = __webpack_require__(19);
+var _dust = __webpack_require__(13);
 
 var _dust2 = _interopRequireDefault(_dust);
 
@@ -116,7 +116,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-__webpack_require__(13);
+__webpack_require__(14);
 
 var tinyHeart = function () {
   function tinyHeart() {
@@ -568,9 +568,9 @@ var babyObj = function () {
 
       // 尾巴摆动
       this.babyTailTimer += that.deltaTime;
-      if (this.babyTailTimer > 50) {
+      if (this.babyTailTimer > 60) {
         this.babyTailCount = (this.babyTailCount + 1) % 8;
-        this.babyTailTimer %= 50;
+        this.babyTailTimer %= 60;
       }
 
       // 眼睛眨动
@@ -880,17 +880,6 @@ module.exports = haloObj;
 
 /***/ }),
 /* 13 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 14 */,
-/* 15 */,
-/* 16 */,
-/* 17 */,
-/* 18 */,
-/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -949,6 +938,12 @@ var dustObj = function () {
 }();
 
 module.exports = dustObj;
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);
