@@ -19,8 +19,8 @@ class dataObj {
     that.ctx1.shadowColor = "white"
     that.ctx1.fillStyle = "white"
 
-    // that.ctx1.fillText("fruitNum " + this.fruitNum, w * 0.5, h - 60)
-    // that.ctx1.fillText("double " + this.double, w * 0.5, h - 40)
+    that.ctx1.fillText("fruitNum " + this.fruitNum, w * 0.5, h - 60)
+    that.ctx1.fillText("double " + this.double, w * 0.5, h - 40)
     that.ctx1.fillText("SCORE " + this.score, w * 0.5, h - 20)
 
     if (this.gameOver) {

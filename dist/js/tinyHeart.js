@@ -96,15 +96,27 @@ var _collision = __webpack_require__(9);
 
 var _collision2 = _interopRequireDefault(_collision);
 
-var _data = __webpack_require__(16);
+var _data = __webpack_require__(10);
 
 var _data2 = _interopRequireDefault(_data);
+
+var _wave = __webpack_require__(11);
+
+var _wave2 = _interopRequireDefault(_wave);
+
+var _halo = __webpack_require__(12);
+
+var _halo2 = _interopRequireDefault(_halo);
+
+var _dust = __webpack_require__(19);
+
+var _dust2 = _interopRequireDefault(_dust);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-__webpack_require__(10);
+__webpack_require__(13);
 
 var tinyHeart = function () {
   function tinyHeart() {
@@ -127,10 +139,18 @@ var tinyHeart = function () {
     this.mom = new _mom2.default(this);
     this.baby = new _baby2.default(this);
     this.data = new _data2.default(this);
+    this.wave = new _wave2.default(this);
+    this.halo = new _halo2.default(this);
+    this.dust = new _dust2.default(this);
+
     var _this = this;
 
-    this.can1.addEventListener('mousemove', function (e) {
-      if (!_this.data.gameOver && (e.offSetX || e.layerX)) {
+    this.can1.addEventListener('mousemove', function mousemove(e) {
+      if (_this.data.gameOver) {
+        _this.can1.removeEventListener('mousemove', mousemove);
+        return;
+      }
+      if (e.offSetX || e.layerX) {
         _this.mx = e.offSetX === undefined ? e.layerX : e.offSetX;
         _this.my = e.offSetY === undefined ? e.layerY : e.offSetY;
       }
@@ -145,6 +165,7 @@ var tinyHeart = function () {
       this.fruit.init();
       this.mom.init();
       this.baby.init();
+      this.dust.init();
 
       this.ctx1.font = "30px Verdana";
       this.ctx1.textAlign = "center";
@@ -169,8 +190,15 @@ var tinyHeart = function () {
         _this.baby.draw();
         _this.data.draw();
 
-        _collision2.default.momFruitsCollision(_this.fruit, _this.mom, _this.data);
-        _collision2.default.momBabyColllision(_this.mom, _this.baby, _this.data);
+        // 大鱼吃果实和大鱼喂小鱼的特效
+        _this.wave.draw();
+        _this.halo.draw();
+        _this.dust.draw();
+
+        //console.log(_this.fruit.alive);
+
+        _collision2.default.momFruitsCollision(_this.fruit, _this.mom, _this.data, _this.wave);
+        _collision2.default.momBabyColllision(_this.mom, _this.baby, _this.data, _this.halo);
         // console.log(deltaTime)
       }
     }
@@ -202,24 +230,38 @@ var aneObj = function () {
   function aneObj(that) {
     _classCallCheck(this, aneObj);
 
-    this.x = [];
-    this.len = [];
     this.num = 50;
+    // 二次赛尔曲线
+    //  start point, control point, end point(sin)
+    this.rootx = [];
+    this.headx = [];
+    this.heady = [];
+    this.amp = [];
+    // 正弦函数
+    this.alpha = 0;
+
     this.that = that;
+    this.h = that.can1.height;
   }
 
   _createClass(aneObj, [{
     key: "init",
     value: function init() {
+
       for (var i = 0; i < this.num; i++) {
-        this.x[i] = i * 16 + Math.random() * 20;
-        this.len[i] = 200 + Math.random() * 20;
+        this.rootx[i] = i * 16 + Math.random() * 20;
+        this.headx[i] = this.rootx[i];
+        this.heady[i] = this.h - 250 + Math.random() * 50;
+        this.amp[i] = Math.random() * 50 + 50;
       }
     }
   }, {
     key: "draw",
     value: function draw() {
       var that = this.that;
+
+      this.alpha += that.deltaTime * 0.001;
+      var l = Math.sin(this.alpha);
       that.ctx2.save();
       that.ctx2.globalAlpha = 0.6;
       that.ctx2.lineWidth = 20;
@@ -227,8 +269,9 @@ var aneObj = function () {
       that.ctx2.strokeStyle = "#3b154e";
       for (var i = 0; i < this.num; i++) {
         that.ctx2.beginPath();
-        that.ctx2.moveTo(this.x[i], that.canHeight);
-        that.ctx2.lineTo(this.x[i], that.canHeight - this.len[i]);
+        that.ctx2.moveTo(this.rootx[i], this.h);
+        this.headx[i] = this.rootx[i] + l * this.amp[i];
+        that.ctx2.quadraticCurveTo(this.rootx[i], this.h - 100, this.headx[i], this.heady[i]);
         that.ctx2.stroke();
       }
       that.ctx2.restore();
@@ -262,6 +305,7 @@ var fruitObj = function () {
     this.blue = new Image();
     this.x = [];
     this.y = [];
+    this.aneNo = [];
     this.l = [];
     this.spd = [];
     this.fruitType = [];
@@ -274,6 +318,7 @@ var fruitObj = function () {
         this.alive[i] = false;
         this.x[i] = 0;
         this.y[i] = 0;
+        this.aneNo[i] = 0;
         this.spd[i] = Math.random() * 0.017 + 0.003;
         this.fruitType[i] = '';
       }
@@ -287,11 +332,14 @@ var fruitObj = function () {
       for (var i = 0; i < this.num; i++) {
         if (this.alive[i]) {
           if (this.l[i] <= 14) {
+            // grow
+            this.x[i] = that.ane.headx[this.aneNo[i]];
+            this.y[i] = that.ane.heady[this.aneNo[i]];
             this.l[i] += this.spd[i] * that.deltaTime;
           } else {
             this.y[i] -= this.spd[i] * 7 * that.deltaTime;
           }
-          that.ctx2.drawImage(this[this.fruitType[i]], this.x[i] - this.orange.width * 0.5, this.y[i] - this.orange.height * 0.5, this.l[i], this.l[i]);
+          that.ctx2.drawImage(this[this.fruitType[i]], this.x[i] - this.l[i] * 0.5, this.y[i] - this.l[i] * 0.5, this.l[i], this.l[i]);
           if (this.y[i] < 10) {
             this.alive[i] = false;
           }
@@ -302,9 +350,7 @@ var fruitObj = function () {
     key: "born",
     value: function born(i) {
       var that = this.that;
-      var aneID = Math.floor(Math.random() * that.ane.num);
-      this.x[i] = that.ane.x[aneID];
-      this.y[i] = that.canHeight - that.ane.len[aneID] + Math.random() * 100;
+      this.aneNo[i] = Math.floor(Math.random() * that.ane.num);
       this.l[i] = 0;
       this.alive[i] = true;
       this.fruitType[i] = 'orange';
@@ -315,7 +361,10 @@ var fruitObj = function () {
   }, {
     key: "dead",
     value: function dead(i) {
+      // 为什么死亡了又复活
       this.alive[i] = false;
+      this.x[i] = 0;
+      this.y[i] = 0;
     }
   }, {
     key: "fruitMonitor",
@@ -326,7 +375,6 @@ var fruitObj = function () {
       }
       if (num < 15) {
         this.sendFruit();
-        return;
       }
     }
   }, {
@@ -335,7 +383,7 @@ var fruitObj = function () {
       for (var i = 0; i < this.num; i++) {
         if (!this.alive[i]) {
           this.born(i);
-          return;
+          break;
         }
       }
     }
@@ -578,14 +626,13 @@ module.exports = babyObj;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-function momFruitsCollision(fruit, mom, data) {
+function momFruitsCollision(fruit, mom, data, wave) {
   if (!data.gameOver) {
     for (var i = 0; i < fruit.num; i++) {
       if (fruit.alive[i]) {
         var l = calLength2(fruit.x[i], fruit.y[i], mom.x, mom.y);
         if (l < 900) {
-          fruit.dead(i);
-
+          wave.born(fruit.x[i], fruit.y[i]);
           if (fruit.fruitType[i] === 'blue' && Math.log(data.double) / Math.log(2) < 8) {
             data.double *= 2;
             mom.bigBodyCount = 7 + Math.log(data.double) / Math.log(2);
@@ -596,22 +643,26 @@ function momFruitsCollision(fruit, mom, data) {
             data.fruitNum++;
             mom.bigBodyCount = 7;
           }
+          fruit.dead(i);
+          break;
         }
       }
     } // 循环结束
   }
 }
 
-function momBabyColllision(mom, baby, data) {
+function momBabyColllision(mom, baby, data, halo) {
   if (!data.gameOver) {
     var l = calLength2(mom.x, mom.y, baby.x, baby.y);
-    if (l < 900) {
+    if (l < 900 && data.fruitNum) {
       // baby recover
       baby.babyBodyCount = 0;
       // mom recover
       mom.bigBodyCount = 0;
 
       data.addScore();
+
+      halo.born(baby.x, baby.y);
     }
   }
 }
@@ -619,17 +670,6 @@ exports.default = { momFruitsCollision: momFruitsCollision, momBabyColllision: m
 
 /***/ }),
 /* 10 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 11 */,
-/* 12 */,
-/* 13 */,
-/* 14 */,
-/* 15 */,
-/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -664,8 +704,8 @@ var dataObj = function () {
       that.ctx1.shadowColor = "white";
       that.ctx1.fillStyle = "white";
 
-      // that.ctx1.fillText("fruitNum " + this.fruitNum, w * 0.5, h - 60)
-      // that.ctx1.fillText("double " + this.double, w * 0.5, h - 40)
+      that.ctx1.fillText("fruitNum " + this.fruitNum, w * 0.5, h - 60);
+      that.ctx1.fillText("double " + this.double, w * 0.5, h - 40);
       that.ctx1.fillText("SCORE " + this.score, w * 0.5, h - 20);
 
       if (this.gameOver) {
@@ -689,6 +729,226 @@ var dataObj = function () {
 }();
 
 module.exports = dataObj;
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var waveObj = function () {
+  function waveObj(that) {
+    _classCallCheck(this, waveObj);
+
+    this.x = [];
+    this.y = [];
+    this.num = 10;
+    this.alive = new Array(this.num).fill(false); //为了防止吃到几个果实不能正常显示几个圈圈的
+    this.r = [];
+
+    this.that = that;
+  }
+
+  _createClass(waveObj, [{
+    key: "draw",
+    value: function draw() {
+      var that = this.that;
+
+      that.ctx1.save();
+      that.ctx1.lineWidth = 2;
+      that.ctx1.shadowBlur = 10;
+      that.ctx1.shadowColor = "white";
+
+      for (var i = 0; i < this.num; i++) {
+        if (this.alive[i]) {
+          this.r[i] += that.deltaTime * 0.04;
+          if (this.r[i] > 50) {
+            this.alive[i] = false;
+            break;
+          }
+          var alpha = 1 - this.r[i] / 50;
+
+          //api
+          that.ctx1.beginPath();
+          that.ctx1.arc(this.x[i], this.y[i], this.r[i], 0, Math.PI * 2);
+          that.ctx1.closePath();
+          that.ctx1.strokeStyle = "rgba(255, 255, 255," + alpha + ")";
+          that.ctx1.stroke();
+        }
+      }
+      that.ctx1.restore();
+    }
+  }, {
+    key: "born",
+    value: function born(x, y) {
+      for (var i = 0; i < this.num; i++) {
+        if (!this.alive[i]) {
+          this.alive[i] = true;
+          this.r[i] = 20;
+          this.x[i] = x;
+          this.y[i] = y;
+
+          return;
+        }
+      }
+    }
+  }]);
+
+  return waveObj;
+}();
+
+module.exports = waveObj;
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var haloObj = function () {
+  function haloObj(that) {
+    _classCallCheck(this, haloObj);
+
+    this.x = new Array(this.num).fill(0);
+    this.y = new Array(this.num).fill(0);
+    this.num = 5;
+    this.alive = new Array(this.num).fill(false); //为了防止吃到几个果实不能正常显示几个圈圈的现象
+    this.r = new Array(this.num).fill(0);
+
+    this.that = that;
+  }
+
+  _createClass(haloObj, [{
+    key: "draw",
+    value: function draw() {
+      var that = this.that;
+
+      that.ctx1.save();
+      that.ctx1.lineWidth = 2;
+      that.ctx1.shadowBlur = 10;
+      that.ctx1.shadowColor = "rgba(203, 91, 0, 1)";
+
+      for (var i = 0; i < this.num; i++) {
+        if (this.alive[i]) {
+          this.r[i] += that.deltaTime * 0.05;
+          if (this.r[i] > 100) {
+            this.alive[i] = false;
+            break;
+          }
+          var alpha = 1 - this.r[i] / 100;
+
+          //api
+          that.ctx1.beginPath();
+          that.ctx1.arc(this.x[i], this.y[i], this.r[i], 0, Math.PI * 2);
+          that.ctx1.closePath();
+          that.ctx1.strokeStyle = "rgba(203, 91, 0," + alpha + ")";
+          that.ctx1.stroke();
+        }
+      }
+      that.ctx1.restore();
+    }
+  }, {
+    key: "born",
+    value: function born(x, y) {
+      for (var i = 0; i < this.num; i++) {
+        if (!this.alive[i]) {
+          this.alive[i] = true;
+          this.r[i] = 20;
+          this.x[i] = x;
+          this.y[i] = y;
+
+          return;
+        }
+      }
+    }
+  }]);
+
+  return haloObj;
+}();
+
+module.exports = haloObj;
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var dustObj = function () {
+  function dustObj(that) {
+    _classCallCheck(this, dustObj);
+
+    this.x = [];
+    this.y = [];
+    this.amp = [];
+    this.NO = [];
+    this.dustPic = [];
+    this.num = 30;
+
+    this.alpha = 0;
+    this.that = that;
+  }
+
+  _createClass(dustObj, [{
+    key: "init",
+    value: function init() {
+      var h = this.that.canHeight;
+      var w = this.that.canWidth;
+      for (var i = 0; i < this.num; i++) {
+        this.x[i] = Math.random() * h;
+        this.y[i] = Math.random() * w;
+        this.amp[i] = 20 + Math.random() * 15;
+        this.NO[i] = Math.floor(Math.random() * 7);
+      }
+      for (var i = 0; i < 7; i++) {
+        this.dustPic[i] = new Image();
+        this.dustPic[i].src = "./img/tinyHeart/dust" + i + ".png";
+      }
+    }
+  }, {
+    key: "draw",
+    value: function draw() {
+      var that = this.that;
+      this.alpha += that.deltaTime * 0.0008;
+      var l = Math.sin(this.alpha);
+      console.log(this.x[0]);
+      for (var i = 0; i < this.num; i++) {
+        var no = this.NO[i];
+        that.ctx1.drawImage(this.dustPic[no], this.x[i] + this.amp[i] * l, this.y[i], this.dustPic[no].width, this.dustPic[no].height);
+      }
+    }
+  }]);
+
+  return dustObj;
+}();
+
+module.exports = dustObj;
 
 /***/ })
 /******/ ]);
