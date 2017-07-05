@@ -57,7 +57,7 @@ class babyObj {
     this.babyEyeTimer += that.deltaTime
     if (this.babyEyeTimer > this.babyEyeInterval) {
       this.babyEyeCount = (this.babyEyeCount + 1) % 2
-      this.babyEyeTimer %= 50
+      this.babyEyeTimer %= this.babyEyeInterval
       if (this.babyEyeCount === 0){
         this.babyEyeInterval = Math.random() * 1500 + 2000
       } else {
@@ -67,9 +67,9 @@ class babyObj {
 
     // 身体变白
     this.babyBodyTimer += that.deltaTime
-    if (this.babyBodyTimer > 500) {
+    if (this.babyBodyTimer > 750) {
       this.babyBodyCount = this.babyBodyCount + 1
-      this.babyBodyTimer %= 500
+      this.babyBodyTimer %= 750
       if (this.babyBodyCount > 19){
         this.babyBodyCount = 19
         // game over

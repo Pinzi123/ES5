@@ -474,7 +474,7 @@ var momObj = function () {
       this.bigEyeTimer += that.deltaTime;
       if (this.bigEyeTimer > this.bigEyeInterval) {
         this.bigEyeCount = (this.bigEyeCount + 1) % 2;
-        this.bigEyeTimer %= 50;
+        this.bigEyeTimer %= this.bigEyeInterval;
         if (this.bigEyeCount === 0) {
           this.bigEyeInterval = Math.random() * 1500 + 2000;
         } else {
@@ -577,7 +577,7 @@ var babyObj = function () {
       this.babyEyeTimer += that.deltaTime;
       if (this.babyEyeTimer > this.babyEyeInterval) {
         this.babyEyeCount = (this.babyEyeCount + 1) % 2;
-        this.babyEyeTimer %= 50;
+        this.babyEyeTimer %= this.babyEyeInterval;
         if (this.babyEyeCount === 0) {
           this.babyEyeInterval = Math.random() * 1500 + 2000;
         } else {
@@ -587,9 +587,9 @@ var babyObj = function () {
 
       // 身体变白
       this.babyBodyTimer += that.deltaTime;
-      if (this.babyBodyTimer > 500) {
+      if (this.babyBodyTimer > 750) {
         this.babyBodyCount = this.babyBodyCount + 1;
-        this.babyBodyTimer %= 500;
+        this.babyBodyTimer %= 750;
         if (this.babyBodyCount > 19) {
           this.babyBodyCount = 19;
           // game over

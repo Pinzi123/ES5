@@ -62,7 +62,7 @@ class momObj {
     this.bigEyeTimer += that.deltaTime
     if (this.bigEyeTimer > this.bigEyeInterval) {
       this.bigEyeCount = (this.bigEyeCount + 1) % 2
-      this.bigEyeTimer %= 50
+      this.bigEyeTimer %= this.bigEyeInterval
       if (this.bigEyeCount === 0){
         this.bigEyeInterval = Math.random() * 1500 + 2000
       } else {
