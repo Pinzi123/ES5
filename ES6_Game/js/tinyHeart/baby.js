@@ -48,9 +48,9 @@ class babyObj {
 
     // 尾巴摆动
     this.babyTailTimer += that.deltaTime
-    if (this.babyTailTimer > 60) {
+    if (this.babyTailTimer > 100) {
       this.babyTailCount = (this.babyTailCount + 1) % 8
-      this.babyTailTimer %= 60
+      this.babyTailTimer %= 100
     }
 
     // 眼睛眨动

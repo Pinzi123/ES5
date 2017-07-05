@@ -465,9 +465,9 @@ var momObj = function () {
 
       // 尾巴摆动
       this.bigTailTimer += that.deltaTime;
-      if (this.bigTailTimer > 50) {
+      if (this.bigTailTimer > 90) {
         this.bigTailCount = (this.bigTailCount + 1) % 8;
-        this.bigTailTimer %= 50;
+        this.bigTailTimer %= 90;
       }
 
       // 眼睛眨动
@@ -568,9 +568,9 @@ var babyObj = function () {
 
       // 尾巴摆动
       this.babyTailTimer += that.deltaTime;
-      if (this.babyTailTimer > 60) {
+      if (this.babyTailTimer > 100) {
         this.babyTailCount = (this.babyTailCount + 1) % 8;
-        this.babyTailTimer %= 60;
+        this.babyTailTimer %= 100;
       }
 
       // 眼睛眨动

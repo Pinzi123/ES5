@@ -53,9 +53,9 @@ class momObj {
 
     // 尾巴摆动
     this.bigTailTimer += that.deltaTime
-    if (this.bigTailTimer > 50) {
+    if (this.bigTailTimer > 90) {
       this.bigTailCount = (this.bigTailCount + 1) % 8
-      this.bigTailTimer %= 50
+      this.bigTailTimer %= 90
     }
 
     // 眼睛眨动
