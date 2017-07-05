@@ -4,6 +4,7 @@ import fruitObj from './tinyHeart/fruit.js'
 import momObj from './tinyHeart/mom.js'
 import babyObj from './tinyHeart/baby.js'
 import collision from './tinyHeart/collision.js'
+import dataObj from './tinyHeart/data.js'
 
 class tinyHeart{
   constructor() {
@@ -24,10 +25,11 @@ class tinyHeart{
     this.ane = new aneObj(this)
     this.mom = new momObj(this)
     this.baby = new babyObj(this)
+    this.data = new dataObj(this)
     let _this = this
 
     this.can1.addEventListener('mousemove', function(e){
-      if(e.offSetX || e.layerX){
+      if(!_this.data.gameOver && (e.offSetX || e.layerX)){
         _this.mx = e.offSetX === undefined ? e.layerX : e.offSetX
         _this.my = e.offSetY === undefined ? e.layerY : e.offSetY
       }
@@ -40,6 +42,10 @@ class tinyHeart{
     this.fruit.init()
     this.mom.init()
     this.baby.init()
+
+    this.ctx1.font = "30px Verdana"
+    this.ctx1.textAlign = "center"
+    
     gameloop()
 
     function gameloop() {
@@ -58,8 +64,10 @@ class tinyHeart{
      _this.ctx1.clearRect(0, 0, _this.canWidth, _this.canWidth)
      _this.mom.draw()
      _this.baby.draw()
+     _this.data.draw()
 
-     collision(_this.fruit, _this.mom)
+     collision.momFruitsCollision(_this.fruit, _this.mom, _this.data)
+     collision.momBabyColllision(_this.mom, _this.baby, _this.data)
      // console.log(deltaTime)
    }
   }

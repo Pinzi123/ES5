@@ -84,23 +84,27 @@ var _fruit = __webpack_require__(6);
 
 var _fruit2 = _interopRequireDefault(_fruit);
 
-var _mom = __webpack_require__(13);
+var _mom = __webpack_require__(7);
 
 var _mom2 = _interopRequireDefault(_mom);
 
-var _baby = __webpack_require__(15);
+var _baby = __webpack_require__(8);
 
 var _baby2 = _interopRequireDefault(_baby);
 
-var _collision = __webpack_require__(14);
+var _collision = __webpack_require__(9);
 
 var _collision2 = _interopRequireDefault(_collision);
+
+var _data = __webpack_require__(16);
+
+var _data2 = _interopRequireDefault(_data);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-__webpack_require__(7);
+__webpack_require__(10);
 
 var tinyHeart = function () {
   function tinyHeart() {
@@ -122,10 +126,11 @@ var tinyHeart = function () {
     this.ane = new _ane2.default(this);
     this.mom = new _mom2.default(this);
     this.baby = new _baby2.default(this);
+    this.data = new _data2.default(this);
     var _this = this;
 
     this.can1.addEventListener('mousemove', function (e) {
-      if (e.offSetX || e.layerX) {
+      if (!_this.data.gameOver && (e.offSetX || e.layerX)) {
         _this.mx = e.offSetX === undefined ? e.layerX : e.offSetX;
         _this.my = e.offSetY === undefined ? e.layerY : e.offSetY;
       }
@@ -140,6 +145,10 @@ var tinyHeart = function () {
       this.fruit.init();
       this.mom.init();
       this.baby.init();
+
+      this.ctx1.font = "30px Verdana";
+      this.ctx1.textAlign = "center";
+
       gameloop();
 
       function gameloop() {
@@ -158,8 +167,10 @@ var tinyHeart = function () {
         _this.ctx1.clearRect(0, 0, _this.canWidth, _this.canWidth);
         _this.mom.draw();
         _this.baby.draw();
+        _this.data.draw();
 
-        (0, _collision2.default)(_this.fruit, _this.mom);
+        _collision2.default.momFruitsCollision(_this.fruit, _this.mom, _this.data);
+        _collision2.default.momBabyColllision(_this.mom, _this.baby, _this.data);
         // console.log(deltaTime)
       }
     }
@@ -337,17 +348,6 @@ module.exports = fruitObj;
 
 /***/ }),
 /* 7 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 8 */,
-/* 9 */,
-/* 10 */,
-/* 11 */,
-/* 12 */,
-/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -362,9 +362,22 @@ var momObj = function () {
     _classCallCheck(this, momObj);
 
     this.angle = 0;
-    this.bigEye = new Image();
-    this.bigBoby = new Image();
-    this.bigTail = new Image();
+    this.bigEyeImg = new Image();
+    this.bigBobyImg = new Image();
+    this.bigTailImg = new Image();
+    this.bigEye = [];
+    this.bigBoby = [];
+    this.bigTail = [];
+
+    this.bigTailTimer = 0;
+    this.bigTailCount = 0;
+
+    this.bigEyeTimer = 0;
+    this.bigEyeCount = 0;
+    this.bigEyeInterval = 1000;
+
+    this.bigBodyTimer = 0;
+    this.bigBodyCount = 0;
 
     this.that = that;
   }
@@ -374,9 +387,18 @@ var momObj = function () {
     value: function init() {
       this.x = this.that.canWidth * 0.5;
       this.y = this.that.canHeight * 0.5;
-      this.bigEye.src = "./img/tinyHeart/bigEye0.png";
-      this.bigBoby.src = "./img/tinyHeart/bigSwim0.png";
-      this.bigTail.src = "./img/tinyHeart/bigTail0.png";
+      for (var i = 0; i < 8; i++) {
+        this.bigTail[i] = "./img/tinyHeart/bigTail" + i + ".png";
+      }
+      for (var _i = 0; _i < 2; _i++) {
+        this.bigEye[_i] = "./img/tinyHeart/bigEye" + _i + ".png";
+      }
+      for (var _i2 = 0; _i2 < 8; _i2++) {
+        this.bigBoby[_i2] = "./img/tinyHeart/bigSwim" + _i2 + ".png";
+      }
+      for (var _i3 = 8; _i3 < 16; _i3++) {
+        this.bigBoby[_i3] = "./img/tinyHeart/bigSwimBlue" + (_i3 - 8) + ".png";
+      }
     }
   }, {
     key: "draw",
@@ -392,12 +414,36 @@ var momObj = function () {
       var beta = Math.atan2(deltaY, deltaX) + Math.PI;
 
       this.angle = lerpAngle(beta, this.angle, 0.6);
+
+      // 尾巴摆动
+      this.bigTailTimer += that.deltaTime;
+      if (this.bigTailTimer > 50) {
+        this.bigTailCount = (this.bigTailCount + 1) % 8;
+        this.bigTailTimer %= 50;
+      }
+
+      // 眼睛眨动
+      this.bigEyeTimer += that.deltaTime;
+      if (this.bigEyeTimer > this.bigEyeInterval) {
+        this.bigEyeCount = (this.bigEyeCount + 1) % 2;
+        this.bigEyeTimer %= 50;
+        if (this.bigEyeCount === 0) {
+          this.bigEyeInterval = Math.random() * 1500 + 2000;
+        } else {
+          this.bigEyeInterval = 200;
+        }
+      }
+
+      this.bigTailImg.src = this.bigTail[this.bigTailCount];
+      this.bigBobyImg.src = this.bigBoby[this.bigBodyCount];
+      this.bigEyeImg.src = this.bigEye[this.bigEyeCount];
+
       that.ctx1.save();
       that.ctx1.translate(this.x, this.y);
       that.ctx1.rotate(this.angle);
-      that.ctx1.drawImage(this.bigTail, -this.bigTail.width * 0.5 + 30, -this.bigTail.height * 0.5, this.bigTail.width, this.bigTail.height);
-      that.ctx1.drawImage(this.bigBoby, -this.bigBoby.width * 0.5, -this.bigBoby.height * 0.5, this.bigBoby.width, this.bigBoby.height);
-      that.ctx1.drawImage(this.bigEye, -this.bigEye.width * 0.5, -this.bigEye.height * 0.5, this.bigEye.width, this.bigEye.height);
+      that.ctx1.drawImage(this.bigTailImg, -this.bigTailImg.width * 0.5 + 30, -this.bigTailImg.height * 0.5, this.bigTailImg.width, this.bigTailImg.height);
+      that.ctx1.drawImage(this.bigBobyImg, -this.bigBobyImg.width * 0.5, -this.bigBobyImg.height * 0.5, this.bigBobyImg.width, this.bigBobyImg.height);
+      that.ctx1.drawImage(this.bigEyeImg, -this.bigEyeImg.width * 0.5, -this.bigEyeImg.height * 0.5, this.bigEyeImg.width, this.bigEyeImg.height);
       that.ctx1.restore();
     }
   }]);
@@ -408,26 +454,7 @@ var momObj = function () {
 module.exports = momObj;
 
 /***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-function momFruitsCollision(fruit, mom) {
-  for (var i = 0; i < fruit.num; i++) {
-    if (fruit.alive[i]) {
-      var l = calLength2(fruit.x[i], fruit.y[i], mom.x, mom.y);
-      if (l < 900) {
-        fruit.dead(i);
-      }
-    }
-  }
-}
-module.exports = momFruitsCollision;
-
-/***/ }),
-/* 15 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -442,9 +469,21 @@ var babyObj = function () {
     _classCallCheck(this, babyObj);
 
     this.angle = 0;
-    this.babyEye = new Image();
-    this.babyBoby = new Image();
-    this.babyTail = new Image();
+    this.babyEye = [];
+    this.babyBoby = [];
+    this.babyTail = [];
+    this.babyEyeImg = new Image();
+    this.babyBobyImg = new Image();
+    this.babyTailImg = new Image();
+    this.babyTailTimer = 0;
+    this.babyTailCount = 0;
+
+    this.babyEyeTimer = 0;
+    this.babyEyeCount = 0;
+    this.babyEyeInterval = 1000;
+
+    this.babyBodyTimer = 0;
+    this.babyBodyCount = 0;
 
     this.that = that;
   }
@@ -452,11 +491,17 @@ var babyObj = function () {
   _createClass(babyObj, [{
     key: "init",
     value: function init() {
-      this.x = this.that.canWidth * 0.5;
-      this.y = this.that.canHeight * 0.5;
-      this.babyEye.src = "./img/tinyHeart/babyEye0.png";
-      this.babyBoby.src = "./img/tinyHeart/babyFade0.png";
-      this.babyTail.src = "./img/tinyHeart/babyTail0.png";
+      this.x = this.that.canWidth * 0.5 - 50;
+      this.y = this.that.canHeight * 0.5 + 50;
+      for (var i = 0; i < 8; i++) {
+        this.babyTail[i] = "./img/tinyHeart/babyTail" + i + ".png";
+      }
+      for (var _i = 0; _i < 2; _i++) {
+        this.babyEye[_i] = "./img/tinyHeart/babyEye" + _i + ".png";
+      }
+      for (var _i2 = 0; _i2 < 20; _i2++) {
+        this.babyBoby[_i2] = "./img/tinyHeart/babyFade" + _i2 + ".png";
+      }
     }
   }, {
     key: "draw",
@@ -472,12 +517,48 @@ var babyObj = function () {
       var beta = Math.atan2(deltaY, deltaX) + Math.PI;
 
       this.angle = lerpAngle(beta, this.angle, 0.6);
+
+      // 尾巴摆动
+      this.babyTailTimer += that.deltaTime;
+      if (this.babyTailTimer > 50) {
+        this.babyTailCount = (this.babyTailCount + 1) % 8;
+        this.babyTailTimer %= 50;
+      }
+
+      // 眼睛眨动
+      this.babyEyeTimer += that.deltaTime;
+      if (this.babyEyeTimer > this.babyEyeInterval) {
+        this.babyEyeCount = (this.babyEyeCount + 1) % 2;
+        this.babyEyeTimer %= 50;
+        if (this.babyEyeCount === 0) {
+          this.babyEyeInterval = Math.random() * 1500 + 2000;
+        } else {
+          this.babyEyeInterval = 200;
+        }
+      }
+
+      // 身体变白
+      this.babyBodyTimer += that.deltaTime;
+      if (this.babyBodyTimer > 500) {
+        this.babyBodyCount = this.babyBodyCount + 1;
+        this.babyBodyTimer %= 500;
+        if (this.babyBodyCount > 19) {
+          this.babyBodyCount = 19;
+          // game over
+          that.data.gameOver = true;
+        }
+      }
+
+      this.babyTailImg.src = this.babyTail[this.babyTailCount];
+      this.babyBobyImg.src = this.babyBoby[this.babyBodyCount];
+      this.babyEyeImg.src = this.babyEye[this.babyEyeCount];
+
       that.ctx1.save();
       that.ctx1.translate(this.x, this.y);
       that.ctx1.rotate(this.angle);
-      that.ctx1.drawImage(this.babyTail, -this.babyTail.width * 0.5 + 30, -this.babyTail.height * 0.5, this.babyTail.width, this.babyTail.height);
-      that.ctx1.drawImage(this.babyBoby, -this.babyBoby.width * 0.5, -this.babyBoby.height * 0.5, this.babyBoby.width, this.babyBoby.height);
-      that.ctx1.drawImage(this.babyEye, -this.babyEye.width * 0.5, -this.babyEye.height * 0.5, this.babyEye.width, this.babyEye.height);
+      that.ctx1.drawImage(this.babyTailImg, -this.babyTailImg.width * 0.5 + 30, -this.babyTailImg.height * 0.5, this.babyTailImg.width, this.babyTailImg.height);
+      that.ctx1.drawImage(this.babyBobyImg, -this.babyBobyImg.width * 0.5, -this.babyBobyImg.height * 0.5, this.babyBobyImg.width, this.babyBobyImg.height);
+      that.ctx1.drawImage(this.babyEyeImg, -this.babyEyeImg.width * 0.5, -this.babyEyeImg.height * 0.5, this.babyEyeImg.width, this.babyEyeImg.height);
       that.ctx1.restore();
     }
   }]);
@@ -486,6 +567,128 @@ var babyObj = function () {
 }();
 
 module.exports = babyObj;
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+function momFruitsCollision(fruit, mom, data) {
+  if (!data.gameOver) {
+    for (var i = 0; i < fruit.num; i++) {
+      if (fruit.alive[i]) {
+        var l = calLength2(fruit.x[i], fruit.y[i], mom.x, mom.y);
+        if (l < 900) {
+          fruit.dead(i);
+
+          if (fruit.fruitType[i] === 'blue' && Math.log(data.double) / Math.log(2) < 8) {
+            data.double *= 2;
+            mom.bigBodyCount = 7 + Math.log(data.double) / Math.log(2);
+          } else if (data.fruitNum < 8) {
+            data.fruitNum++;
+            mom.bigBodyCount = data.fruitNum;
+          } else {
+            data.fruitNum++;
+            mom.bigBodyCount = 7;
+          }
+        }
+      }
+    } // 循环结束
+  }
+}
+
+function momBabyColllision(mom, baby, data) {
+  if (!data.gameOver) {
+    var l = calLength2(mom.x, mom.y, baby.x, baby.y);
+    if (l < 900) {
+      // baby recover
+      baby.babyBodyCount = 0;
+      // mom recover
+      mom.bigBodyCount = 0;
+
+      data.addScore();
+    }
+  }
+}
+exports.default = { momFruitsCollision: momFruitsCollision, momBabyColllision: momBabyColllision };
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 11 */,
+/* 12 */,
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var dataObj = function () {
+  function dataObj(that) {
+    _classCallCheck(this, dataObj);
+
+    this.fruitNum = 0;
+    this.double = 1;
+    this.score = 0;
+    this.gameOver = false;
+    this.alpha = 0;
+
+    this.that = that;
+  }
+
+  _createClass(dataObj, [{
+    key: "draw",
+    value: function draw() {
+      var that = this.that;
+      var w = that.can1.width;
+      var h = that.can1.height;
+
+      that.ctx1.save();
+      that.ctx1.shadowBlur = 10;
+      that.ctx1.shadowColor = "white";
+      that.ctx1.fillStyle = "white";
+
+      // that.ctx1.fillText("fruitNum " + this.fruitNum, w * 0.5, h - 60)
+      // that.ctx1.fillText("double " + this.double, w * 0.5, h - 40)
+      that.ctx1.fillText("SCORE " + this.score, w * 0.5, h - 20);
+
+      if (this.gameOver) {
+        this.alpha += 0.005;
+        if (this.alpha > 1) this.alpha = 1;
+        that.ctx1.fillStyle = "rgba(255, 255, 255, " + this.alpha + ")";
+        that.ctx1.fillText("GAMEOVER ", w * 0.5, h * 0.5);
+      }
+      that.ctx1.restore();
+    }
+  }, {
+    key: "addScore",
+    value: function addScore() {
+      this.score += this.fruitNum * this.double;
+      this.fruitNum = 0;
+      this.double = 1;
+    }
+  }]);
+
+  return dataObj;
+}();
+
+module.exports = dataObj;
 
 /***/ })
 /******/ ]);
