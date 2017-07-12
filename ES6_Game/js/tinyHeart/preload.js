@@ -44,5 +44,7 @@ let preLoad = new PreLoad(imgs, function(count){
                                   console.log('over');
                                   pro.style.display = "none"
                                   document.getElementById('allcanvas').style.display = "block"
+                                  var tiny = new tinyHeart()
+                                  document.body.onload = tiny.game()
                                 })
 preLoad._unorderes()

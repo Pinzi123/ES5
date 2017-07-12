@@ -1,5 +1,4 @@
 require('../css/tinyHeart.css')
-require('../js/tinyHeart/preload.js')
 import aneObj from './tinyHeart/ane.js'
 import fruitObj from './tinyHeart/fruit.js'
 import momObj from './tinyHeart/mom.js'
@@ -9,7 +8,6 @@ import dataObj from './tinyHeart/data.js'
 import waveObj from './tinyHeart/wave.js'
 import haloObj from './tinyHeart/halo.js'
 import dustObj from './tinyHeart/dust.js'
-
 class tinyHeart{
   constructor() {
 
@@ -99,6 +97,4 @@ class tinyHeart{
 
 
 }
-
-var tiny = new tinyHeart()
-document.body.onload = tiny.game()
+require('../js/tinyHeart/preload.js')
