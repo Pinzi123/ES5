@@ -6,11 +6,21 @@ body{
   height: 600px;
   margin: 0px auto;
 }
+#progress{
+  width: 800px;
+  height: 600px;
+  margin: 300px auto;
+  font-size: 28px;
+  text-align: center;
+  vertical-align: middle;
+  color: red;
+}
 #allcanvas{
   position: relative;
   width: 800px;
   height: 600px;
   margin: 0px;
+  display: none;
 }
 #canvas1{
   position: absolute;

@@ -1,4 +1,5 @@
 require('../css/tinyHeart.css')
+require('../js/tinyHeart/preload.js')
 import aneObj from './tinyHeart/ane.js'
 import fruitObj from './tinyHeart/fruit.js'
 import momObj from './tinyHeart/mom.js'

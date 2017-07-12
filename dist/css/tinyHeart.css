@@ -1,1 +1,1 @@
-body{padding-top:10px}.all_bg{margin:0 auto}#allcanvas,.all_bg{width:800px;height:600px}#allcanvas{position:relative;margin:0}#canvas1{z-index:1}#canvas1,#canvas2{position:absolute;bottom:0;left:0}#canvas2{z-index:0}
+body{padding-top:10px}.all_bg{margin:0 auto}#progress,.all_bg{width:800px;height:600px}#progress{margin:300px auto;font-size:28px;text-align:center;vertical-align:middle;color:red}#allcanvas{position:relative;width:800px;height:600px;margin:0;display:none}#canvas1{z-index:1}#canvas1,#canvas2{position:absolute;bottom:0;left:0}#canvas2{z-index:0}
