@@ -30,7 +30,6 @@ class dustObj {
     let that = this.that
     this.alpha += that.deltaTime * 0.0008
     let l = Math.sin(this.alpha)
-    console.log(this.x[0]);
     for (var i = 0; i < this.num; i++) {
       var no = this.NO[i]
       that.ctx1.drawImage(this.dustPic[no], this.x[i] + this.amp[i] * l, this.y[i], this.dustPic[no].width, this.dustPic[no].height)
