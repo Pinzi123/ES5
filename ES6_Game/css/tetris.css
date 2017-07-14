@@ -21,6 +21,23 @@ body{
     border: 1px solid green;
 }
 
+/*级别过高，相当于根目录*/
+@media only screen and (max-width: 800px) {
+  body{
+      background: red;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  body{
+    background: grey;
+  }
+  .game-container, .start-container{
+    height: calc((98vw - 80px) * 1.538);
+    width: 98vw;
+  }
+}
+
 .game-container{
     /*display: none;*/
 }
@@ -64,6 +81,15 @@ body{
     border-left: 1px solid green;
     border-right: 1px solid green;
 }
+
+@media only screen and (max-width: 480px) {
+  .game-main-panel{
+    height: calc((98vw - 80px) * 1.538);
+    width: calc(98vw - 80px);
+    left: 80px;
+    border-right: none;
+  }
+}
 .timer-panel{
     position: absolute;
     top: 0;
@@ -71,11 +97,22 @@ body{
     width: 100px;
     height: 100px;
 }
+@media only screen and (max-width: 480px) {
+  .timer-panel{
+    width: 80px;
+    height: 30px;
+  }
+}
 .help-panel{
     position: absolute;
     top: 150px;
     left: 0;
     width: 100px;
+}
+@media only screen and (max-width: 480px) {
+  .help-panel{
+    display: none;
+  }
 }
 .level-panel{
     position: absolute;
@@ -84,6 +121,13 @@ body{
     width: 100px;
     height: 100px;
 }
+@media only screen and (max-width: 480px) {
+  .level-panel{
+    left: 0;
+    bottom: 0;
+    width: 80px;
+  }
+}
 .next-panel{
     position: absolute;
     right: 0;
@@ -91,11 +135,24 @@ body{
     width: 100px;
     height: 100px;
 }
+@media only screen and (max-width: 480px) {
+  .next-panel{
+    width: 80px;
+    height: 30px;
+    left: 0;
+    top: 60px;
+  }
+}
 .setting-panel{
     position: absolute;
     top: 150px;
     right: 0;
     width: 100px;
+}
+@media only screen and (max-width: 480px) {
+  .setting-panel{
+    display: none;
+  }
 }
 .score-panel{
     position: absolute;
@@ -104,12 +161,28 @@ body{
     width: 100px;
     height: 100px;
 }
+@media only screen and (max-width: 480px) {
+  .score-panel{
+    width: 80px;
+    height: 30px;
+    left: 0;
+    top: 150px;
+  }
+}
 .high-score-panel{
     position: absolute;
     right: 0;
     bottom: 0;
     width: 100px;
     height: 100px;
+}
+@media only screen and (max-width: 480px) {
+  .high-score-panel{
+    width: 80px;
+    height: 30px;
+    left: 0;
+    top: 210px;
+  }
 }
 .panel-header{
     height: 30px;
@@ -119,9 +192,20 @@ body{
     color:#fff;
     background: lightsalmon;
 }
+
 .panel-body{
     text-align: center;
     line-height: 70px;
+}
+@media only screen and (max-width: 480px) {
+  .panel-body{
+    width: 80px;
+    line-height: 30px;
+    height: 30px;
+  }
+  .panel-body canvas{
+    height: 30px;
+  }
 }
 .help-panel .panel-body,
 .setting-panel .panel-body{
