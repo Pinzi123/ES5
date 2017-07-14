@@ -2,11 +2,12 @@ var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-//var webpack = require('webpack');
+var webpack = require('webpack');
 module.exports = {
   entry: {
     chess: "./ES6_Game/js/chessIndex.js",
-    tinyHeart: "./ES6_Game/js/tinyHeartIndex.js"
+    tinyHeart: "./ES6_Game/js/tinyHeartIndex.js",
+    tetris: "./ES6_Game/js/tetrisIndex.js"
   },
   output: {
     filename: 'js/[name].js',
@@ -25,11 +26,11 @@ module.exports = {
     // new webpack.ProvidePlugin({
     //   commonFunc: 'commonFunc',
     // }),
-    // new webpack.optimize.UglifyJsPlugin({
-    //   compress: {
-    //     warnings: false
-    //   }
-    // }),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    }),
     new HtmlWebpackPlugin({
       filename: 'chess.html',
       template: 'ES6_Game/chess.html',
@@ -43,6 +44,13 @@ module.exports = {
       inject: 'body',
       title: '爱心鱼',
       chunks: ['tinyHeart']
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'tetrisIndex.html',
+      template: 'ES6_Game/tetrisIndex.html',
+      inject: 'body',
+      title: '俄罗斯方块',
+      chunks: ['tetris']
     })
   ],
   module: {
@@ -62,6 +70,11 @@ module.exports = {
       {
         test: /\.css$/,
         loader: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader' })
+      },
+      // 图片处理
+      {
+        test: /\.(png|jpg|gif|svg)$/i,
+        loader: 'file-loader'
       }
     ]
   }
