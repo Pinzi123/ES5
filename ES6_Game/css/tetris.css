@@ -11,6 +11,13 @@ body{
     color: #fff;
 }
 
+#gamepad {
+  position: absolute;
+  bottom: 0px;
+  height: 150px;
+  width: 99vw;
+}
+
 .game-container, .start-container{
     position: relative;
     box-sizing: content-box;
@@ -22,16 +29,13 @@ body{
 }
 
 /*级别过高，相当于根目录*/
-@media only screen and (max-width: 800px) {
+/*@media only screen and (max-width: 800px) {
   body{
       background: red;
   }
-}
+}*/
 
 @media only screen and (max-width: 480px) {
-  body{
-    background: grey;
-  }
   .game-container, .start-container{
     height: calc((98vw - 80px) * 1.538);
     width: 98vw;
