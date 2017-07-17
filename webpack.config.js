@@ -74,7 +74,13 @@ module.exports = {
       // 图片处理
       {
         test: /\.(png|jpg|gif|svg)$/i,
-        loader: 'file-loader'
+        use: {
+         loader: 'file-loader',
+         options: {
+           name: 'img/tetris/[hash:8].[ext]',
+           publicPath: '../' //解决css中图片引用的相对路径错误问题
+         }
+       }
       }
     ]
   }
