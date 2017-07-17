@@ -2,6 +2,8 @@ class GamePad {
   constructor() {
     this.can=document.getElementById("gamepad")
     this.ctx=this.can.getContext("2d")
+    this.can.width = screen.width
+    this.w = this.can.width
   }
 
   draw() {
@@ -20,21 +22,21 @@ class GamePad {
     this.ctx.save()
     this.ctx.fillStyle="#FF0000"
     this.ctx.beginPath()
-    this.ctx.arc(210,60,15,0,Math.PI*2,true)
+    this.ctx.arc(this.w - 120,60,15,0,Math.PI*2,true)
     this.ctx.closePath()
     this.ctx.fill()
     this.ctx.font="10px Georgia";
-    this.ctx.fillText("Pause",230,65);
+    this.ctx.fillText("Pause",this.w - 100,65);
     this.ctx.restore()
 
     this.ctx.save()
     this.ctx.fillStyle="#0000ff"
     this.ctx.beginPath()
-    this.ctx.arc(250,100,15,0,Math.PI*2,true)
+    this.ctx.arc(this.w - 80,100,15,0,Math.PI*2,true)
     this.ctx.closePath()
     this.ctx.fill()
     this.ctx.font="10px Georgia";
-    this.ctx.fillText("Setting",190,105);
+    this.ctx.fillText("Setting",this.w - 60,105);
     this.ctx.restore()
 
     let _this = this
@@ -44,51 +46,57 @@ class GamePad {
   }
 
   reDraw(p) {
+    let e = null
     this.ctx.save()
     this.ctx.strokeStyle="#0000ff"
     this.ctx.sector(75,75,50,1.775*Math.PI,0.225*Math.PI)
     if (this.ctx.isPointInPath(p.x,p.y)) {
-      console.log('right')
+      e = 'right'
     }
     this.ctx.stroke()
     this.ctx.sector(75,75,50,0.275*Math.PI,0.725*Math.PI)
     if (this.ctx.isPointInPath(p.x,p.y)) {
-      console.log('down')
+      e = 'down'
     }
     this.ctx.stroke()
     this.ctx.sector(75,75,50,0.775*Math.PI,1.225*Math.PI)
     if (this.ctx.isPointInPath(p.x,p.y)) {
-      console.log('left')
+      e = 'left'
     }
     this.ctx.stroke()
     this.ctx.sector(75,75,50,1.275*Math.PI,1.725*Math.PI)
     if (this.ctx.isPointInPath(p.x,p.y)) {
-      console.log('up')
+      e = 'up'
     }
     this.ctx.stroke()
     this.ctx.restore()
 
     this.ctx.save()
     this.ctx.strokeStyle="#FF0000"
+    this.ctx.lineWidth=0
     this.ctx.beginPath()
-    this.ctx.arc(210,60,15,0,Math.PI*2,true)
+    this.ctx.arc(this.w - 120,60,15,0,Math.PI*2,true)
     this.ctx.closePath()
-    if (this.ctx.isPointInPath(p.x - 50,p.y)) {
-      console.log('Pause')
+    if (this.ctx.isPointInPath(p.x,p.y)) {
+      e = 'pause'
     }
     this.ctx.stroke()
     this.ctx.restore()
 
     this.ctx.save()
     this.ctx.strokeStyle="#0000ff"
+    this.ctx.lineWidth=0
     this.ctx.beginPath()
-    this.ctx.arc(250,100,15,0,Math.PI*2,true)
+    this.ctx.arc(this.w - 80,100,15,0,Math.PI*2,true)
     this.ctx.closePath()
-    if (this.ctx.isPointInPath(p.x - 50,p.y)) {
-      console.log('Setting')
+    if (this.ctx.isPointInPath(p.x,p.y)) {
+      e = 'setting'
     }
     this.ctx.stroke()
     this.ctx.restore()
+
+    console.log(e);
+    return e
   }
 
   getPosition(e){
@@ -98,7 +106,6 @@ class GamePad {
       x: clientX,
       y: clientY
     }
-    console.log(e.clientX);
     return p
   }
 }
