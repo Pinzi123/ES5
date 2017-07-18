@@ -1,5 +1,6 @@
 require('../css/tetris.css')
 require('../js/tetris/comFun.js')
+import Board from './tetris/Board.js'
 
 // 加载虚拟键盘
 var gamepadObj = require('../js/tetris/gamepad.js')
@@ -23,4 +24,5 @@ function _init() {
 }
 document.addEventListener('DOMContentLoaded', function(ev){
   _init()
+  new Board()
 })

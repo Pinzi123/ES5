@@ -110,14 +110,4 @@ class GamePad {
   }
 }
 
-//扇形
-CanvasRenderingContext2D.prototype.sector = function (x, y, radius, sDeg, eDeg) {
-  this.beginPath()
-  this.moveTo(x,y);
-  this.arc(x, y, radius, sDeg, eDeg)
-  // 闭合路径
-  this.closePath();
-  return this;
-}
-
 module.exports = GamePad
