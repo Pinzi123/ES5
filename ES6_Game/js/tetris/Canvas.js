@@ -16,5 +16,9 @@ class Canvas {
     this.el.width = this.width
     this.el.height = this.height
   }
+
+  clear (fromX = 0, fromY = 0, toX = this.width, toY = this.height) {
+    this.context.clearRect(fromX, fromY, toX, toY)
+  }
 }
 module.exports = Canvas

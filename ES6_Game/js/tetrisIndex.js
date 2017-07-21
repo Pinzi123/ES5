@@ -1,6 +1,8 @@
 require('../css/tetris.css')
 require('../js/tetris/comFun.js')
-import Board from './tetris/Board.js'
+require('../js/tetris/ResourceManager.js')
+require('../js/tetris/config.js')
+import Tetris from './tetris/Tetris.js'
 
 // 加载虚拟键盘
 var gamepadObj = require('../js/tetris/gamepad.js')
@@ -16,6 +18,7 @@ function _init() {
     $('.start-container').css('display','none')
     $('.game-container').css('display','block')
     $('#gamepad').css('display','block')
+    startGame()
   })
 
   $('#btn-setting').on('click', function (e) {
@@ -24,5 +27,11 @@ function _init() {
 }
 document.addEventListener('DOMContentLoaded', function(ev){
   _init()
-  new Board()
 })
+
+function startGame() {
+  ResourceManager.onResourceLoaded = function(){
+    new Tetris().startGame()
+  }
+  ResourceManager.init()
+}
