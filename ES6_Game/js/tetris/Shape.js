@@ -23,6 +23,7 @@ class Shape {
     this.block = new Block(this.blockType)
 
     this.layout = shapeLayouts[random(0, shapeLayouts.length)]
+    this.oldlayout
   }
 
   draw (context, size) {
@@ -36,6 +37,7 @@ class Shape {
   }
 
   rotate () {
+    this.oldlayout = this.layout
     let newLayout = []
     for (var y = 0; y < this.layout[0].length; y++) {
       newLayout[y] = []
@@ -60,6 +62,9 @@ class Shape {
     if (this.y + this.layout.length > TetrisConfig.rows) {
       this.y = TetrisConfig.rows - this.layout.length;
     }
+  }
+  _returnLayout () {
+    this.layout = this.oldlayout
   }
 }
 module.exports = Shape

@@ -25,14 +25,14 @@ class keyControl {
     }
   }
   press (key) {
-    var refresh = false;
+    var refresh = false
     switch (key) {
       case 'top':
         this.board.shape.rotate()
         if (this.board.validMove(0, 0)) {
           refresh = true;
         } else {
-          console.log('wrong')
+          this.board.shape._returnLayout()
         }
         break;
       case 'right':
