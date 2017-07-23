@@ -20,8 +20,18 @@ class Board {
     this._initGrid()
 
     this.shape.draw(this.context, this.blockSize)
+
+    var self = this;
+    setTimeout(function () {
+      self._bulidNextShape()
+    })
   }
 
+  _bulidNextShape () {
+    this.nextShape = new Shape()
+    this.nextShape.setPosition(this.gameInst.nextshape.cols, this.gameInst.nextshape.rows)
+    this.gameInst.nextshape.render(this.nextShape)
+  }
 
   _buildGridData () {
     for (var i = 0; i < this.rows; i++) {
@@ -62,7 +72,8 @@ class Board {
         return
       }
       this.clearFullRows()
-      this.shape = new Shape()
+      this.shape = this.nextShape
+      this._bulidNextShape()
     }
     this.refresh()
     this.shape.draw(this.context, this.blockSize)
@@ -131,6 +142,7 @@ class Board {
   //方块消除
   clearFullRows () {
     let lines = 0
+    let _this = this
     let emptyArr = new Array(this.cols).fill(0)
     for(var y = this.rows -1 ; y >= 0; y--){
         let filled = this.boardList[y].filter((item) => {return item > 0}).length === this.cols
@@ -142,7 +154,16 @@ class Board {
         }
       }
     let score = lines * 100
-    this.gameInst.scroe.addScore(score)
+    let totalScore = this.gameInst.scroe.addScore(score)
+    let currentLevel = this.gameInst.level.checkLevel(totalScore)
+    if (currentLevel) {
+      window.TetrisConfig.speed = Math.floor(window.TetrisConfig.constSpeed * (1 - (currentLevel - 1)/10))
+      this.gameInst.pause()
+      setTimeout(function(){
+        window.alert("恭喜你，升级了！")
+        _this.gameInst.resume()
+      })
+    }
   }
 
 }

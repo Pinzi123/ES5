@@ -23,7 +23,6 @@ class Canvas {
 
   //绘制文本
   drawText (text, x, y) {
-    console.log(text)
     this.clear(0, 0);
     this.context.font = '25px Arial';
     this.context.fillStyle = 'purple';

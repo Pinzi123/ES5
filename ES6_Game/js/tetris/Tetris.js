@@ -2,19 +2,25 @@ import Board from './Board.js'
 import KeyControl from './keyControl.js'
 import Score from './Score.js'
 import Timer from './Timer.js'
+import Level from './Level.js'
+import NextShape from './NextShape.js'
+
 require ('./howler.min.js')
 class Tetris {
   constructor() {
-    this.board = new Board(this)
-    this.keyControl = new KeyControl(this.board)
     this.scroe = new Score()
     this.timer = new Timer()
+    this.level = new Level()
+    this.nextshape = new NextShape()
+
     this.sound = new Howl({
       src: ['audio/bg.wav'],
       loop: true,
       volume: 0.3
     })
     this._state = 'playing'
+    this.board = new Board(this)
+    this.keyControl = new KeyControl(this.board)
   }
 
   startGame () {

@@ -66,5 +66,22 @@ class Shape {
   _returnLayout () {
     this.layout = this.oldlayout
   }
+
+  _getMaxCols  () {
+  var max = 0;
+  for (var y = 0; y < this.layout.length; y++) {
+    max = Math.max(max, this.layout[y].length);
+  }
+  return max;
+  }
+  _getMaxRows () {
+    return this.layout.length;
+  }
+  setPosition (cols, rows, ignoreRows) {
+    this.x = Math.floor((cols - this._getMaxCols()) / 2);
+    if (!ignoreRows) {
+      this.y = Math.floor((rows - this._getMaxRows()) / 2);
+    }
+  }
 }
 module.exports = Shape
