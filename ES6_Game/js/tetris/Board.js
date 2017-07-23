@@ -1,7 +1,7 @@
 import Canvas from './Canvas.js';
 import Shape from './Shape.js'
 class Board {
-  constructor () {
+  constructor (that) {
     this.blockSize = 30
     this.rows = 20
     this.cols = 13
@@ -10,6 +10,7 @@ class Board {
     this.context = this.canvas.context
     this.boardList = []
     this.shape = new Shape()
+    this.gameInst = that
 
     this._init()
   }
@@ -56,6 +57,10 @@ class Board {
       this.shape.y += 1;
     } else {
       this.addShapeToBoardList()
+      if (this.gameInst._state === 'over') {
+        this.gameInst.endGame()
+        return
+      }
       this.clearFullRows()
       this.shape = new Shape()
     }
@@ -97,15 +102,15 @@ class Board {
     for (var y = 0; y < this.shape.layout.length; y++) {
       for (var x = 0; x < this.shape.layout[y].length; x++) {
         if (this.shape.layout[y][x]) {
-          var boardX = this.shape.x + x;
-          var boardY = this.shape.y + y;
+          var boardX = this.shape.x + x
+          var boardY = this.shape.y + y
           if (this.boardList[boardY][boardX]) {
             // todo Game over
-            // this.gameInst._state = 'over';
+            this.gameInst._state = 'over'
             return;
           }
           else {
-            this.boardList[boardY][boardX] = this.shape.blockType;
+            this.boardList[boardY][boardX] = this.shape.blockType
           }
         }
       }
@@ -125,16 +130,19 @@ class Board {
 
   //方块消除
   clearFullRows () {
-    console.log('this.boardList', this.boardList[0])
-    var emptyArr = new Array(this.cols).fill(0)
+    let lines = 0
+    let emptyArr = new Array(this.cols).fill(0)
     for(var y = this.rows -1 ; y >= 0; y--){
         let filled = this.boardList[y].filter((item) => {return item > 0}).length === this.cols
         if (filled && y) {
-          console.log('小初一行')
           this.boardList.splice(y, 1)
           this.boardList.unshift(emptyArr)
+          lines++
+          y++
         }
       }
+    let score = lines * 100
+    this.gameInst.scroe.addScore(score)
   }
 
 }

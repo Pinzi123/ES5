@@ -5,8 +5,9 @@ require('../js/tetris/config.js')
 import Tetris from './tetris/Tetris.js'
 
 // 加载虚拟键盘
-var gamepadObj = require('../js/tetris/gamepad.js')
+let gamepadObj = require('../js/tetris/gamepad.js')
 let gamepad = new gamepadObj()
+let gameInst
 if(screen.width < 481 || window.screen.width < 481) {
   gamepad.draw()
 }
@@ -24,14 +25,28 @@ function _init() {
   $('#btn-setting').on('click', function (e) {
     alert('Setting')
   })
+
+  $('#btn-game-pause').on('click', function (e) {
+    let el = e.target
+    if (gameInst._state !== 'over'){
+      if (el.innerText === '暂停') {
+        el.innerText = '继续'
+        gameInst.pause()
+      } else {
+        el.innerText = '暂停'
+        gameInst.resume()
+      }
+    }
+  })
 }
-document.addEventListener('DOMContentLoaded', function(ev){
+document.addEventListener('DOMContentLoaded', function(e){
   _init()
 })
 
 function startGame() {
   ResourceManager.onResourceLoaded = function(){
-    new Tetris().startGame()
+    gameInst = new Tetris()
+    gameInst.startGame()
   }
   ResourceManager.init()
 }

@@ -17,9 +17,9 @@ class keyControl {
     })
   }
   processKeyDown (evt) {
-    // if (this.board.gameInst._state !== 'playing') {
-    //   return;
-    // }
+    if (this.board.gameInst._state !== 'playing') {
+      return;
+    }
     if (keys[evt.keyCode]) {
       this.press(keys[evt.keyCode]);
     }

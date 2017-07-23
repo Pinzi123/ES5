@@ -95,7 +95,6 @@ class GamePad {
     this.ctx.stroke()
     this.ctx.restore()
 
-    console.log(e);
     return e
   }
 
