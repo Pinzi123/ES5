@@ -152,10 +152,11 @@ class Board {
           lines++
           y++
         }
-      }
+    }
     let score = lines * 100
     let totalScore = this.gameInst.scroe.addScore(score)
     let currentLevel = this.gameInst.level.checkLevel(totalScore)
+    this.gameInst.highscore.checkScore(totalScore)
     if (currentLevel) {
       window.TetrisConfig.speed = Math.floor(window.TetrisConfig.constSpeed * (1 - (currentLevel - 1)/10))
       this.gameInst.pause()

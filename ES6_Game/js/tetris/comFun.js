@@ -15,7 +15,6 @@
   }
 
   window.$ = function(selector, context){
-    console.log('selector', selector);
     return new DomObject((context || document).querySelector(selector))
   }
 

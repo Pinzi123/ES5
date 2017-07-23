@@ -4,6 +4,7 @@ import Score from './Score.js'
 import Timer from './Timer.js'
 import Level from './Level.js'
 import NextShape from './NextShape.js'
+import HighScore from './HighScore.js'
 
 require ('./howler.min.js')
 class Tetris {
@@ -12,6 +13,7 @@ class Tetris {
     this.timer = new Timer()
     this.level = new Level()
     this.nextshape = new NextShape()
+    this.highscore = new HighScore()
 
     this.sound = new Howl({
       src: ['audio/bg.wav'],
@@ -25,7 +27,9 @@ class Tetris {
 
   startGame () {
     this.keyControl.init()
-    this.sound.play()
+    if (window.TetrisConfig.config.enableSound) {
+     this.sound.play()
+    }
     this._startTick()
   }
 
@@ -41,7 +45,9 @@ class Tetris {
   }
 
   resume () {
-    this.sound.play()
+    if (window.TetrisConfig.config.enableSound) {
+     this.sound.play()
+    }
 
     this._state = 'playing'
 
