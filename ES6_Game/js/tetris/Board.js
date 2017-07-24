@@ -133,7 +133,7 @@ class Board {
     for(var y = 0; y < this.rows; y++){
       for (var x = 0; x < this.cols; x++) {
         if(this.boardList[y][x]) {
-          this.shape.block.draw(this.context, x, y, this.boardList[y][x])
+          this.shape.block.draw(this.context, x, y, this.boardList[y][x], this.blockSize)
         }
       }
     }
@@ -153,7 +153,7 @@ class Board {
           y++
         }
     }
-    let score = lines * 100
+    let score = lines * 100 * lines
     let totalScore = this.gameInst.scroe.addScore(score)
     let currentLevel = this.gameInst.level.checkLevel(totalScore)
     this.gameInst.highscore.checkScore(totalScore)

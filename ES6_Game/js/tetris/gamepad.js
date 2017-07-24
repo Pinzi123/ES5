@@ -4,48 +4,42 @@ class GamePad {
     this.ctx=this.can.getContext("2d")
     this.can.width = screen.width
     this.w = this.can.width
+    this.set = 'Pause'
+    this.key = null
   }
 
   draw() {
+
     this.ctx.save()
     this.ctx.strokeStyle="#0000ff"
     this.ctx.sector(75,75,50,1.775*Math.PI,0.225*Math.PI)
-    this.ctx.stroke();
+    this.ctx.stroke()
     this.ctx.sector(75,75,50,0.275*Math.PI,0.725*Math.PI)
-    this.ctx.stroke();
+    this.ctx.stroke()
     this.ctx.sector(75,75,50,0.775*Math.PI,1.225*Math.PI)
-    this.ctx.stroke();
+    this.ctx.stroke()
     this.ctx.sector(75,75,50,1.275*Math.PI,1.725*Math.PI)
-    this.ctx.stroke();
+    this.ctx.stroke()
     this.ctx.restore()
 
     this.ctx.save()
-    this.ctx.fillStyle="#FF0000"
     this.ctx.beginPath()
     this.ctx.arc(this.w - 120,60,15,0,Math.PI*2,true)
     this.ctx.closePath()
-    this.ctx.fill()
-    this.ctx.font="10px Georgia";
-    this.ctx.fillText("Pause",this.w - 100,65);
+    this.drawText('Pause','#FF0000',this.w - 100,65)
     this.ctx.restore()
 
     this.ctx.save()
-    this.ctx.fillStyle="#0000ff"
     this.ctx.beginPath()
     this.ctx.arc(this.w - 80,100,15,0,Math.PI*2,true)
     this.ctx.closePath()
-    this.ctx.fill()
-    this.ctx.font="10px Georgia";
-    this.ctx.fillText("Setting",this.w - 60,105);
+    this.drawText('Setting','#0000ff', this.w - 60, 105)
     this.ctx.restore()
 
-    let _this = this
-    this.can.addEventListener('click', function(e){
-      _this.reDraw(_this.getPosition(e));
-    }, false)
   }
 
   reDraw(p) {
+    this.ctx.clearRect(0,0,this.can.width,this.can.height);
     let e = null
     this.ctx.save()
     this.ctx.strokeStyle="#0000ff"
@@ -66,7 +60,7 @@ class GamePad {
     this.ctx.stroke()
     this.ctx.sector(75,75,50,1.275*Math.PI,1.725*Math.PI)
     if (this.ctx.isPointInPath(p.x,p.y)) {
-      e = 'up'
+      e = 'top'
     }
     this.ctx.stroke()
     this.ctx.restore()
@@ -77,10 +71,18 @@ class GamePad {
     this.ctx.beginPath()
     this.ctx.arc(this.w - 120,60,15,0,Math.PI*2,true)
     this.ctx.closePath()
+    this.ctx.fillStyle="#0000ff"
     if (this.ctx.isPointInPath(p.x,p.y)) {
-      e = 'pause'
+      if (this.set === 'Pause') {
+        e = 'pause'
+        this.set = 'Resume'
+      } else {
+        e = 'resume'
+        this.set = 'Pause'
+      }
+      console.log(this.set)
     }
-    this.ctx.stroke()
+    this.drawText(this.set,'#FF0000',this.w - 100,65)
     this.ctx.restore()
 
     this.ctx.save()
@@ -92,10 +94,19 @@ class GamePad {
     if (this.ctx.isPointInPath(p.x,p.y)) {
       e = 'setting'
     }
+    this.drawText('Setting','#0000ff', this.w - 60, 105)
     this.ctx.stroke()
     this.ctx.restore()
 
+    this.key = e
     return e
+  }
+
+  drawText(text,color,x,y) {
+    this.ctx.fillStyle = color
+    this.ctx.fill()
+    this.ctx.font="10px Georgia";
+    this.ctx.fillText(text,x,y);
   }
 
   getPosition(e){

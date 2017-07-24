@@ -12,7 +12,6 @@ if(screen.width < 481 || window.screen.width < 481) {
   gamepad.draw()
 }
 
-
 // 开始游戏界面
 function _init() {
   $('#btn-start').on('click', function (e) {
@@ -27,8 +26,7 @@ function _init() {
   })
 
   $('#btn-game-setting').on('click', function (e) {
-    $('.modal-dialog').css('display', 'block')
-    gameInst.pause()
+    setting()
   })
 
   $('#btn-dialog-close').on('click',function(){
@@ -42,7 +40,6 @@ function _init() {
   })
 
   $('#btn-game-pause').on('click', function (e) {
-    console.log('暂停')
     let el = e.target
     if (gameInst._state !== 'over'){
       if (el.innerText === '暂停') {
@@ -54,6 +51,32 @@ function _init() {
       }
     }
   })
+
+  function setting() {
+    $('.modal-dialog').css('display', 'block')
+    gameInst.pause()
+  }
+
+
+  //虚拟按键点击事件
+  gamepad.can.addEventListener('touchstart', function (evt) {
+    var _touch = evt.touches[0]
+    let e = {clientX: _touch.pageX,
+             clientY: _touch.pageY
+            }
+     window.padKey = gamepad.reDraw(gamepad.getPosition(e))
+     switch (window.padKey) {
+       case 'pause':
+         gameInst.pause()
+         break;
+       case 'resume':
+         gameInst.resume()
+         break;
+       case 'setting':
+         setting()
+         break;
+     }
+  }, false)
 
 }
 document.addEventListener('DOMContentLoaded', function(e){

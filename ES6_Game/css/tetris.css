@@ -134,6 +134,7 @@ body{
     left: 0;
     bottom: 0;
     width: 80px;
+    height: 60px;
   }
 }
 .next-panel{
@@ -213,6 +214,10 @@ body{
   }
   .panel-body canvas{
     height: 30px;
+  }
+  .next-panel  .panel-body canvas{
+      height: 60px;
+      width: 80px;
   }
 }
 .help-panel .panel-body,

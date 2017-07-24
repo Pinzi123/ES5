@@ -15,6 +15,14 @@ class keyControl {
   document.addEventListener('keydown', function (evt) {
     self.processKeyDown(evt)
     })
+  document.getElementById("gamepad").addEventListener('touchstart', function (evt) {
+      this.timerTouch = window.setInterval(function () {
+        self.press(window.padKey)
+      }, 80)
+    })
+  document.getElementById("gamepad").addEventListener('touchend', function (evt) {
+      window.clearInterval(this.timerTouch)
+    })
   }
   processKeyDown (evt) {
     if (this.board.gameInst._state !== 'playing') {
@@ -56,7 +64,7 @@ class keyControl {
     }
     if (refresh) {
       this.board.refresh();
-      this.board.shape.draw(this.board.context);
+      this.board.shape.draw(this.board.context, this.board.blockSize);
       if (key === 'down') {
         var self = this;
         window.clearInterval(window.TetrisConfig.intervalId);
