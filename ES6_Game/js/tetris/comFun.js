@@ -1,7 +1,7 @@
 //简单的dom操作
 (function(document){
   function DomObject(dom) {
-  this.dom = dom
+    this.dom = dom
   }
   DomObject.prototype.get = function (){
     return this.dom

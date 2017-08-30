@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>WschatClient</title>
+</head>
+<body>
+	<input id='input' type="text" style="width: 100px">
+</body>
+<script type="text/javascript">
+	window.onload = function() {
+		var nick = prompt("Enter your nickname");
+		var input = document.getElementById("input");
+		input.focus();
+
+		var socket = new WebSocket("ws://"+window.location.hostname+":8081")
+
+	   socket.onopen = function(e){
+		  if (nick!=null && nick!="")
+		    {
+		    socket.send(nick);
+		    }
+		}
+
+
+		socket.onmessage = function(e){
+			var msg = JSON.parse(e.data);
+			showMessage(msg);
+		}
+
+		input.onchange = function() {
+			var msg = nick + ":" + input.value;
+			socket.send(msg);
+			input.value = "";
+		}
+
+			// 添加消息
+		function showMessage(msg){
+			var node = document.createTextNode(msg.data);
+			var div = document.createElement("div");
+
+			if (msg.type === 'enter') {
+				div.style.color = "red";
+			} else if (msg.type === 'leave'){
+				div.style.color = 'blue';
+			}
+			div.appendChild(node);
+			document.body.insertBefore(div, input);
+			input.scrollIntoView();
+		}
+		
+	}
+
+</script>
+</html>
