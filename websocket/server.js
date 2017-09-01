@@ -56,19 +56,18 @@ var server = ws.createServer(function (conn) {
 	var nick = ''
 	
 	conn.on("text", function (str) {
-
 		console.log("Received "+str)
 		if (!clientCount) {
 			nick = str
-			broadcast(stringify('enter', nick + ' comes in'))
+			broadcast('enter', nick + ' comes in')
 		} else{
-			broadcast(stringify('message', str))
+			broadcast('message', str)
 		}
 		clientCount++
 	})
 	conn.on("close", function (code, reason) {
 		console.log("Connection closed")
-		broadcast(stringify('leave', nick + ' left!'))
+		broadcast('leave', nick + ' left!')
 	})
     conn.on("error", function (err) {
 		console.log("handle err")
@@ -77,12 +76,14 @@ var server = ws.createServer(function (conn) {
 
 console.log("websocket server listening on port " + PORT + "!")
 
-function broadcast(str){
+function broadcast(type, msg){
+	var str = stringify(type, msg)
 	server.connections.forEach(function(connection){
 		connection.sendText(str)
 	})
 }
 
+//简单数据封装
 function stringify(type, str){
 	var mes = {}
 	mes.type = type

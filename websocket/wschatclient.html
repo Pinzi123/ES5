@@ -23,10 +23,18 @@
 		}
 
 
-		socket.onmessage = function(e){
-			var msg = JSON.parse(e.data);
+		bindEvent(socket, 'enter', function(msg){
 			showMessage(msg);
-		}
+		})
+
+		bindEvent(socket, 'leave', function(msg){
+			showMessage(msg);
+		})
+
+		bindEvent(socket, 'message', function(msg){
+			showMessage(msg);
+		})
+
 
 		input.onchange = function() {
 			var msg = nick + ":" + input.value;
@@ -34,8 +42,9 @@
 			input.value = "";
 		}
 
-			// 添加消息
+		// 添加消息
 		function showMessage(msg){
+			console.log(msg.data);
 			var node = document.createTextNode(msg.data);
 			var div = document.createElement("div");
 
@@ -50,6 +59,33 @@
 		}
 		
 	}
+
+
+    // socket简单的onmessage事件代理,其实可以进一步封装成对象
+    
+	var eventBus = new Array()
+
+	function bindEvent(socket, type, fn) {
+		eventBus.push({type:type,fn:fn})
+		socket.onmessage = function (e) {
+			var msg = JSON.parse(e.data)
+			eventBus.forEach(function(v){
+				if(v.type === msg.type){
+					v.fn(msg)
+					return
+				}
+			})
+		}
+	}
+
+	function removeEvent(type) {
+		eventBus.forEach(function(v, i){
+			if(v.type === type){
+				eventBus.splice(i,1)
+				return
+			}
+		})		
+	}	
 
 </script>
 </html>
