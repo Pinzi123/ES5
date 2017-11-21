@@ -7,9 +7,27 @@
 </head>
 <body>
   <div class="entry" style="text-align: center;margin-top: 30px">
-    <button class="bttn-float bttn-md bttn-danger bttn-no-outline"><a href="dist/chess.html">五子棋</a></button>
-    <button class="bttn-float bttn-md bttn-danger bttn-no-outline"><a href="dist/tinyHeart.html">爱心鱼</a></button>
-    <button class="bttn-float bttn-md bttn-danger bttn-no-outline"><a href="dist/tetrisIndex.html">俄罗斯方块</a></button>
+    <button data-num='0' class="bttn-float bttn-md bttn-danger bttn-no-outline">
+      五子棋
+    </button>
+    <button data-num='1' class="bttn-float bttn-md bttn-danger bttn-no-outline">
+      爱心鱼
+    </button>
+    <button data-num='2' class="bttn-float bttn-md bttn-danger bttn-no-outline">
+      俄罗斯方块
+    </button>
   </div>
 </body>
+<script>
+  var entry = document.getElementsByClassName('entry')[0]
+  var buttons = entry.getElementsByTagName('button')
+  var links = ['dist/chess.html','dist/tinyHeart.html','dist/tetrisIndex.html']
+  entry.addEventListener('click',function(e){
+    console.log(e.target.nodeName)
+    if(e.target.nodeName === 'BUTTON'){
+      console.log(e.target.dataset.num)
+      window.open(links[e.target.dataset.num])
+    }
+  },false)
+</script>
 </html>
