@@ -26,6 +26,7 @@
     "not ie <= 8"
   ],
   "dependencies": {
+    "createjs": "^1.0.1",
     "expose-loader": "^0.7.3"
   }
 }
