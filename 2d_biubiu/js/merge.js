@@ -26,7 +26,8 @@ function selected(event) {
             .call(replaceImg,[t2,"./img/t2.jpg",600,100],this);
             break;
         case mm:
-            mergeT(t1,t2);
+            // mergeT(t1,t2);
+            mergeTimg();
             break;
     }
 }
@@ -97,6 +98,39 @@ function mergeT(t1,t2){
     .wait(300)
     .call(replaceImg,[mm,"./img/m4.png",300,150,1,1],this)
     .wait(400)
+    .call(replaceImg,[mm,"./img/timg.jpeg",-150,0,0.3,0.3],this)
+}
+
+/**
+ * 采用序列帧
+ */
+function mergeTimg(){
+    t1&&hide(t1);
+    t2&&hide(t2);
+    hide(mm).call(()=>{
+        var data = {
+            images: ["./img/mm.png"],
+            /**
+             * width & height 所需和指定的帧的尺寸
+             * regX & regY 指示帧的注册点或“原点”
+             * spacing 表示帧之间的间隔
+             * margin 指定图像边缘的边缘
+             * count 允许您指定在spritesheet帧的总数
+             */
+            frames: {width:200, height:200},
+            animations: {
+                stand:5,
+                //start, end, next, speed.
+                run:[0,5,"stand",0.4],
+            }
+        }
+        var spriteSheet = new createjs.SpriteSheet(data);
+        var animation = new createjs.Sprite(spriteSheet, "run");
+        animation.x = 350;
+        animation.y = 200;
+        stage.addChild(animation);
+        animation.gotoAndPlay("run");
+    }).wait(100)
     .call(replaceImg,[mm,"./img/timg.jpeg",-150,0,0.3,0.3],this)
 }
 
