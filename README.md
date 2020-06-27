@@ -1,5 +1,5 @@
 # ES6Game
-### 基于ES6实现的几个[小游戏](https://pinzi123.github.io/ES5/.)
+### 基于ES6实现的几个[小游戏](https://pinzi123.github.io/canvas_game/.)
 在网上看的一些项目，然后在学ES6，就试着用ES6重写了一边，现在真的写前端和后端一样了
 #### 五子棋
 - 采用继承的方法
