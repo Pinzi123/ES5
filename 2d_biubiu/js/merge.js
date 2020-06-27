@@ -13,7 +13,6 @@ a2.addEventListener("click", selected);
 mm.addEventListener("click", selected);
 
 function selected(event) {
-    console.log(event);
     let target = event.target;
     switch (target) {
         case a1:
@@ -56,9 +55,16 @@ function replaceImg(target,src,x,y,scaleX=0.6,scaleY=0.6){
             let nt = addImg(src,
                 x, y,
                 scaleX,scaleY);
+            nt.alpha = 0;
+            nt.visible = true;
             stage.removeChild(target);
             if(target === t1) t1 = nt;
-            if(target === t2) t2 = nt;
+            else if(target === t2) t2 = nt;
+            else{
+                stage.removeChild(mm);
+                mm = nt;
+            } 
+            return show(nt);
         }
     )
 }
@@ -69,6 +75,12 @@ function hide(circle) {
     .to({alpha:0, visible:false}, 300);
 }
 
+function show(target){
+    return Tween.get(target)
+    .wait(100)
+    .to({alpha:1, visible:true}, 300);
+}
+
 function move(target, props, time=1000){
     return Tween.get(target)
     .to(props, time, Ease.getPowIn(2.2));
@@ -76,7 +88,16 @@ function move(target, props, time=1000){
 
 function mergeT(t1,t2){
     hide(t1);
-    hide(t2).call(replaceImg,[mm,"./img/timg.jpeg",-150,0,0.3,0.3],this)
+    hide(t2)
+    .call(replaceImg,[mm,"./img/m1.png",300,150,1,1],this)
+    .wait(100)
+    .call(replaceImg,[mm,"./img/m2.png",300,150,1,1],this)
+    .wait(200)
+    .call(replaceImg,[mm,"./img/m3.png",300,150,1,1],this)
+    .wait(300)
+    .call(replaceImg,[mm,"./img/m4.png",300,150,1,1],this)
+    .wait(400)
+    .call(replaceImg,[mm,"./img/timg.jpeg",-150,0,0.3,0.3],this)
 }
 
 Ticker.addEventListener("tick", handleTick);

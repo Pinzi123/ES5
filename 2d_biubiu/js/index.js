@@ -8,11 +8,23 @@ var circle2 = createCircle(500, 100);
 
 var tween1 = move(circle1,{x:300,y:400})
 .call(hide, [circle1], this)
-.call(toManyCircle, [circle2], this);
+.call(toManyCircle, [circle1], this)
+.wait(50)
+.call(toManyCircle, [circle1], this)
+.wait(100)
+.call(toManyCircle, [circle1], this)
+.wait(150)
+.call(toManyCircle, [circle1], this)
 
 var tween2 = move(circle2,{x:300,y:400})
 .call(hide, [circle2], this)
-.call(toManyCircle, [circle2], this);
+.call(toManyCircle, [circle2], this)
+.wait(50)
+.call(toManyCircle, [circle2], this)
+.wait(100)
+.call(toManyCircle, [circle2], this)
+.wait(150)
+.call(toManyCircle, [circle2], this)
 
 
 function move(target, props, time=1000){
